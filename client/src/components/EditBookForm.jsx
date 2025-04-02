@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState } from 'react';
 
 const EditBookForm = ({ book, onCancel, onSave }) => {
     const [title, setTitle] = useState(book.title);
@@ -17,35 +17,101 @@ const EditBookForm = ({ book, onCancel, onSave }) => {
             fileSize: parseFloat(fileSize)
         };
 
-        const response = await fetch(`/api/Books/${book.id}`, {
+        const res = await fetch(`/api/Books/${book.id}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedBook)
         });
 
-        if (response.ok) {
-            onSave(); // триггер обновления
+        if (res.ok) {
+            onSave(); // обновить список
         } else {
-            alert('Ошибка при сохранении');
+            alert('❌ Ошибка при сохранении');
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ marginBottom: '1rem' }}>
-            <h3>Редактировать книгу</h3>
-            <input value={title} onChange={(e) => setTitle(e.target.value)} required />
-            <br />
-            <input value={author} onChange={(e) => setAuthor(e.target.value)} required />
-            <br />
-            <input value={pages} type="number" onChange={(e) => setPages(e.target.value)} required />
-            <br />
-            <input value={fileSize} type="number" step="0.1" onChange={(e) => setFileSize(e.target.value)} required />
-            <br />
-            <button type="submit">Сохранить</button>
-            <button type="button" onClick={onCancel} style={{ marginLeft: '1rem' }}>Отмена</button>
-        </form>
+        <div style={{
+            maxWidth: '700px',
+            margin: '30px auto',
+            padding: '20px',
+            border: '1px solid #ddd',
+            borderRadius: '6px',
+            backgroundColor: '#f9f9f9',
+            fontFamily: 'sans-serif'
+        }}>
+            <h2>✏️ Редактировать книгу</h2>
+
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    placeholder="Название"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    required
+                    style={{ display: 'block', marginBottom: '10px', padding: '8px', width: '300px' }}
+                />
+
+                <input
+                    type="text"
+                    placeholder="Автор"
+                    value={author}
+                    onChange={(e) => setAuthor(e.target.value)}
+                    required
+                    style={{ display: 'block', marginBottom: '10px', padding: '8px', width: '300px' }}
+                />
+
+                <input
+                    type="number"
+                    placeholder="Количество страниц"
+                    value={pages}
+                    onChange={(e) => setPages(e.target.value)}
+                    required
+                    style={{ display: 'block', marginBottom: '10px', padding: '8px', width: '300px' }}
+                />
+
+                <input
+                    type="number"
+                    step="0.1"
+                    placeholder="Размер файла (МБ)"
+                    value={fileSize}
+                    onChange={(e) => setFileSize(e.target.value)}
+                    required
+                    style={{ display: 'block', marginBottom: '15px', padding: '8px', width: '300px' }}
+                />
+
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <button
+                        type="submit"
+                        style={{
+                            padding: '10px 16px',
+                            background: '#4caf50',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Сохранить
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        style={{
+                            padding: '10px 16px',
+                            background: '#ddd',
+                            color: '#333',
+                            border: '1px solid #aaa',
+                            borderRadius: '4px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Отмена
+                    </button>
+                </div>
+            </form>
+        </div>
     );
 };
 

@@ -1,20 +1,16 @@
 ﻿import React, { useState } from 'react';
-import BookList from './components/BookList';
 import BookForm from './components/BookForm';
+import BookList from './components/BookList';
 
 function App() {
-    const [reload, setReload] = useState(0);
+    const [reloadTrigger, setReloadTrigger] = useState(false);
 
-    const handleBookAdded = () => {
-        setReload(prev => prev + 1); // триггер обновления списка
-    };
+    const triggerReload = () => setReloadTrigger(!reloadTrigger);
 
     return (
-        <div className="App">
-            <h1>📘 Мои книги</h1>
-            <BookForm onBookAdded={handleBookAdded} />
-            <hr />
-            <BookList reloadTrigger={reload} />
+        <div>
+            <BookForm onBookAdded={triggerReload} />
+            <BookList reloadTrigger={reloadTrigger} />
         </div>
     );
 }

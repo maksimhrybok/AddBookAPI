@@ -23,9 +23,16 @@ namespace FitTrackAPI.Controllers
 
         // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<Book>>> GetBooks(string? search)
         {
-            return await _context.Books.ToListAsync();
+            var query = _context.Books.AsQueryable();
+
+            if(!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(b => b.Title.ToLower().Contains(search.ToLower()));
+            }
+
+            return await query.ToListAsync();
         }
 
         // GET: api/Books/5
